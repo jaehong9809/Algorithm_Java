@@ -28,36 +28,49 @@ class Solution {
                 for (int row = 0; row < n; row++) {
                     int nowCol = col;
                     int nowRow = row;
-                    boolean isPossible = false;
+                    int cnt = bfs(nowCol, nowRow);
 
-                    for (int i = 0; i < 4; i++) {
-                        int nCol = nowCol + dx[i];
-                        int nRow = nowRow + dy[i];
-
-                        if (nCol < 0 || nCol >= n || nRow < 0 || nRow >= n) continue;
-
-                        if (map[nCol][nRow] - map[nowCol][nowRow] == 1) {
-                            isPossible = true;
-                            break;
-                        }
-                    }
-                    if (isPossible) {
-                        int cnt = bfs(nowCol, nowRow);
-
-                        if (cnt == maxCnt) {
-                            if (maxNumber > map[nowCol][nowRow]) {
-                                maxNumber = map[nowCol][nowRow];
-                                continue;
-                            }
-                        }
-
-                        if (cnt > maxCnt) {
-                            maxCnt = cnt;
+                    if (cnt == maxCnt) {
+                        if (maxNumber > map[nowCol][nowRow]) {
                             maxNumber = map[nowCol][nowRow];
+                            continue;
                         }
-
-
                     }
+
+                    if (cnt > maxCnt) {
+                        maxCnt = cnt;
+                        maxNumber = map[nowCol][nowRow];
+                    }
+//                    boolean isPossible = false;
+//
+//                    for (int i = 0; i < 4; i++) {
+//                        int nCol = nowCol + dx[i];
+//                        int nRow = nowRow + dy[i];
+//
+//                        if (nCol < 0 || nCol >= n || nRow < 0 || nRow >= n) continue;
+//
+//                        if (map[nCol][nRow] - map[nowCol][nowRow] == 1) {
+//                            isPossible = true;
+//                            break;
+//                        }
+//                    }
+//                    if (isPossible) {
+//                        int cnt = bfs(nowCol, nowRow);
+//
+//                        if (cnt == maxCnt) {
+//                            if (maxNumber > map[nowCol][nowRow]) {
+//                                maxNumber = map[nowCol][nowRow];
+//                                continue;
+//                            }
+//                        }
+//
+//                        if (cnt > maxCnt) {
+//                            maxCnt = cnt;
+//                            maxNumber = map[nowCol][nowRow];
+//                        }
+//
+//
+//                    }
                 }
             }
             System.out.println("#" + TESTCASE + " " + maxNumber + " " + maxCnt);
@@ -67,16 +80,12 @@ class Solution {
     public static int bfs(int nowCol, int nowRow) {
         Queue<Node> queue = new LinkedList<>();
         queue.offer(new Node(nowCol, nowRow));
-        int[][] visited = new int[n][n];
-        visited[nowCol][nowRow] = 1;
 
-        int max = -1;
+        int max = 0;
 
         while (!queue.isEmpty()) {
+            max++;
             Node now = queue.poll();
-            if (max < visited[now.col][now.row]) {
-                max = visited[now.col][now.row];
-            }
 
             for (int i = 0; i < 4; i++) {
                 int nCol = now.col + dx[i];
@@ -84,7 +93,6 @@ class Solution {
                 if (nCol < 0 || nCol >= n || nRow < 0 || nRow >= n) continue;
 
                 if (map[nCol][nRow] - map[now.col][now.row] == 1) {
-                    visited[nCol][nRow] = visited[now.col][now.row] + 1;
                     queue.offer(new Node(nCol, nRow));
                 }
             }
