@@ -16,7 +16,7 @@ class Main {
         for (int i = 0; i < n; i++) {
             String groupName = br.readLine();
             // TreeSet 탐색 O(log n), HashSet 탐색 O(1)
-            map.put(groupName, new HashSet<>());
+            map.put(groupName, new TreeSet<>());
 
             int memberNum = Integer.parseInt(br.readLine());
             for (int j = 0; j < memberNum; j++) {
@@ -36,9 +36,8 @@ class Main {
                     }
                 }
             } else {
-                List<String> members = new ArrayList<>(map.get(name));
-                Collections.sort(members);
-                for (String member : members) {
+
+                for (String member : map.get(name)) {
                     System.out.println(member);
                 }
             }
