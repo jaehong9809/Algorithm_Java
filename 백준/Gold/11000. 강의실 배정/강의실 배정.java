@@ -7,7 +7,7 @@ class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        int[][] studies=new int[n][2];
+        int[][] studies = new int[n][2];
         for (int i = 0; i < n; i++) {
             String[] str = br.readLine().split(" ");
             studies[i][0] = Integer.parseInt(str[0]);
@@ -25,11 +25,11 @@ class Main {
         for (int i = 0; i < n; i++) {
             if (pq.isEmpty()) {
                 pq.offer(new Node(studies[i][0], studies[i][1]));
-            }else{
-                if(pq.peek().end <= studies[i][0]){
+            } else {
+                if (pq.peek().end <= studies[i][0]) {
                     pq.poll();
                     pq.offer(new Node(studies[i][0], studies[i][1]));
-                }else{
+                } else {
                     pq.offer(new Node(studies[i][0], studies[i][1]));
                 }
             }
@@ -40,7 +40,8 @@ class Main {
 
         System.out.println(max);
     }
-    static class Node implements Comparable<Node>{
+
+    static class Node implements Comparable<Node> {
         int start;
         int end;
         int interval;
@@ -48,7 +49,7 @@ class Main {
         public Node(int start, int end) {
             this.start = start;
             this.end = end;
-            this.interval = end-start;
+            this.interval = end - start;
         }
 
         @Override
