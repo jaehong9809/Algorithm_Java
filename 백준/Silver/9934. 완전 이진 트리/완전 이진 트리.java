@@ -9,33 +9,32 @@ class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         k = sc.nextInt();
-        data = new int[(int) Math.pow(2, k)+1];
-        floors = new ArrayList[k + 1];
+        data = new int[(int) Math.pow(2, k) + 1];
+
+        floors = new ArrayList[k];
+
         for (int i = 0; i < k; i++) {
             floors[i] = new ArrayList<>();
         }
-
-        for (int i = 1; i <=Math.pow(2, k)-1; i++) {
+        for (int i = 1; i <= Math.pow(2, k) - 1; i++) {
             data[i] = sc.nextInt();
         }
 
+        int n = (int) Math.pow(2, k) / 2;
+        func(n, n / 2, 0);
 
-        int n = (int) Math.pow(2, k)/2 ;
-        func(n, n/2, 0);
-        //n
-        //n -n/2  n+n/2
         for (int i = 0; i < k; i++) {
             for (int j = 0; j < floors[i].size(); j++) {
-                System.out.print(floors[i].get(j)+" ");
+                System.out.print(floors[i].get(j) + " ");
             }
             System.out.println();
         }
     }
 
-    static void func(int mid,int length , int floor) {
-        if(floor==k)return;
+    static void func(int mid, int length, int floor) {
+        if (floor == k) return;
         floors[floor].add(data[mid]);
-        func(mid-length, length/2, floor+1);
-        func(mid+length, length/2, floor+1);
+        func(mid - length, length / 2, floor + 1);
+        func(mid + length, length / 2, floor + 1);
     }
 }
