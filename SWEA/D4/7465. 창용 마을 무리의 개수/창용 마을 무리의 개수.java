@@ -22,13 +22,10 @@ public class Solution {
                 st = new StringTokenizer(br.readLine());
                 int a = Integer.parseInt(st.nextToken());
                 int b = Integer.parseInt(st.nextToken());
-                union(a, b);
+                if(union(a, b)) n--;
             }
-            int cnt=0;
-            for (int i = 1; i <=n ; i++) {
-                if (parents[i]<0)cnt++;
-            }
-            sb.append("#").append(TESTCASE).append(" ").append(cnt).append("\n");
+
+            sb.append("#").append(TESTCASE).append(" ").append(n).append("\n");
         }
         System.out.println(sb);
     }
