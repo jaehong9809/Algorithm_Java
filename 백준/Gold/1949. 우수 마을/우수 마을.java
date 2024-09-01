@@ -9,30 +9,35 @@ class Main {
     static int[] nums;
     static ArrayList<Integer>[] tree;
     static int[][] dp;
+
     public static void main(String[] args) throws IOException {
+        //입력시작@@@
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
         tree = new ArrayList[n + 1];
         nums = new int[n + 1];
-        dp =new int[n+1][2];
-        for (int i = 1; i <=n ; i++) {
+        dp = new int[n + 1][2];
+        for (int i = 1; i <= n; i++) {
             tree[i] = new ArrayList<>();
         }
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 1; i <= n; i++) {
             nums[i] = Integer.parseInt(st.nextToken());
         }
-        for (int i = 0; i < n-1; i++) {
+        for (int i = 0; i < n - 1; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             tree[a].add(b);
             tree[b].add(a);
         }
-
+        //입력끝@@@@
+        
         dfs(1, -1);
+        
         System.out.println(Math.max(dp[1][0], dp[1][1]));
     }
+
     static void dfs(int x, int prevNode) {
         dp[x][0] = 0;
         dp[x][1] = nums[x];
@@ -40,7 +45,7 @@ class Main {
             if (y == prevNode) continue;
             dfs(y, x);
             dp[x][0] += Math.max(dp[y][0], dp[y][1]);
-            dp[x][1] +=dp[y][0];
+            dp[x][1] += dp[y][0];
         }
     }
 
