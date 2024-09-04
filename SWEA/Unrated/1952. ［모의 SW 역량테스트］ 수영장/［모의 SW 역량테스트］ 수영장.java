@@ -1,9 +1,9 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Scanner;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 class Solution {
-    static int min;
     static int[] pay;
     static int[] plan;
     public static void main(String args[]) throws Exception {
@@ -16,42 +16,20 @@ class Solution {
             for (int i = 0; i < 4; i++) {
                 pay[i] = Integer.parseInt(str[i]);
             }
-
-            min = pay[3];
+            int[] cost = new int[13];
+            Arrays.fill(cost, pay[3]);
+            cost[0]=0;
             str = br.readLine().split(" ");
             for (int i = 1; i <= 12; i++) {
                 plan[i]=Integer.parseInt(str[i-1]);
+                if(i>=3){
+                    cost[i] = Math.min(cost[i - 3] + pay[2], cost[i]);
+                }
+                cost[i] = Math.min(cost[i - 1] + plan[i] * pay[0], cost[i]);
+                cost[i] = Math.min(cost[i - 1] + pay[1], cost[i]);
             }
 
-            func(0, 1);
-
-            System.out.println("#"+test_case+" "+min);
+            System.out.println("#"+test_case+" "+cost[12]);
         }
-    }
-    static void func(int cost, int month){
-        if(month>12){
-            min = Math.min(cost, min);
-            return;
-        }
-
-        int nextMonth=-1;
-        for (int i = month; i <=12 ; i++) {
-            if(plan[i]>0){
-                nextMonth=i;
-                break;
-            }
-        }
-
-        if (nextMonth != -1) {
-            func(cost+plan[nextMonth]*pay[0], nextMonth+1);
-
-            func(cost + pay[1], nextMonth + 1);
-            func(cost+pay[2], nextMonth+3);
-
-        }else{
-            min = Math.min(cost, min);
-        }
-
-
     }
 }
