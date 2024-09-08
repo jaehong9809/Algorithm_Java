@@ -1,7 +1,7 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 class Main {
     static int n, m;
@@ -9,10 +9,11 @@ class Main {
     static ArrayList<Integer>[] graph;
     static ArrayList<Integer> result = new ArrayList<>();
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        m = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
         inDegree = new int[n + 1];
         graph = new ArrayList[n + 1];
 
@@ -21,8 +22,9 @@ class Main {
         }
 
         for (int i = 0; i < m; i++) {
-            int a = sc.nextInt();
-            int b = sc.nextInt();
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
             graph[a].add(b);
             inDegree[b]++;
         }
@@ -34,7 +36,7 @@ class Main {
     }
 
     static void topologySort() {
-        Queue<Integer> queue = new LinkedList<>();
+        Queue<Integer> queue = new ArrayDeque<>();
         for (int i = 1; i <= n; i++) {
             if (inDegree[i] == 0) {
                 queue.offer(i);
