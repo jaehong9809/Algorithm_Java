@@ -21,13 +21,16 @@ class Main {
         map = new int[n][n];
         visited = new int[n][n];
         visited2 = new boolean[n][n];
+
         for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
+
         int tmp = 1;
+
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (visited[i][j] == 0 && map[i][j] == 1) {
@@ -44,6 +47,7 @@ class Main {
                 bfs2(node.x, node.y, index);
             }
         }
+
         System.out.println(min);
     }
 
@@ -65,9 +69,9 @@ class Main {
         Queue<Node> queue = new ArrayDeque<>();
         queue.offer(new Node(x, y));
         visited2[x][y] = true;
+
         while (!queue.isEmpty()) {
             Node now = queue.poll();
-
             for (int i = 0; i < 4; i++) {
                 int nx = dx[i] + now.x;
                 int ny = dy[i] + now.y;
@@ -76,6 +80,7 @@ class Main {
                 if (visited[nx][ny] != index && !visited2[nx][ny]) {
                     if (map[nx][ny] == 1) {
                         min = Math.min(min, now.cnt);
+                        return;
                     }
                     queue.offer(new Node(nx, ny, now.cnt + 1));
                     visited2[nx][ny] = true;
@@ -90,6 +95,7 @@ class Main {
         queue.offer(new Node(x, y));
         visited[x][y] = index;
         ArrayList<Node> list = new ArrayList<>();
+
         while (!queue.isEmpty()) {
             Node now = queue.poll();
             list.add(now);
@@ -104,6 +110,7 @@ class Main {
                 }
             }
         }
+
         return list;
     }
 
