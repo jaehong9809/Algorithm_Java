@@ -12,7 +12,9 @@ class Main {
         n = sc.nextInt();
         m = sc.nextInt();
         gender = new char[n + 1];
+
         sc.nextLine();
+
         String[] s = sc.nextLine().split(" ");
         for (int i = 1; i <= n; i++) {
             gender[i] = s[i - 1].charAt(0);
@@ -36,9 +38,11 @@ class Main {
         boolean[] visited = new boolean[n + 1];
 
         PriorityQueue<Edge> pq = new PriorityQueue<>();
+
         pq.offer(new Edge(1, 0, gender[1]));
         int total = 0;
-        int cnt=0;
+        int cnt = 0;
+
         while (!pq.isEmpty()) {
             Edge edge = pq.poll();
 
@@ -56,9 +60,10 @@ class Main {
                 }
             }
         }
+        
         if (cnt == n) {
             System.out.println(total);
-        }else{
+        } else {
             System.out.println(-1);
         }
 
