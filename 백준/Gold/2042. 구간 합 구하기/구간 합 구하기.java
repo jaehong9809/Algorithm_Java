@@ -1,75 +1,76 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.*;
 import java.util.StringTokenizer;
 
-class Main {
-    static int n, m,k;
+public class Main {
+    static long[] arr;
+    static long[] tree;
+    static int n;
+
+    // 세그먼트 트리 초기화
+    public static void init() {
+        for (int i = 0; i < n; i++) {
+            tree[n + i] = arr[i];
+        }
+        for (int i = n - 1; i > 0; i--) {
+            tree[i] = tree[i * 2] + tree[i * 2 + 1];
+        }
+    }
+
+    // 특정 값을 업데이트
+    public static void update(int idx, long value) {
+        idx += n; // 리프 노드의 위치로 이동
+        tree[idx] = value; // 값 변경
+        while (idx > 1) {
+            idx /= 2;
+            tree[idx] = tree[idx * 2] + tree[idx * 2 + 1]; // 상위 노드 갱신
+        }
+    }
+
+    // 구간 합을 구함
+    public static long sum(int left, int right) {
+        left += n; // 리프 노드로 변환
+        right += n;
+        long result = 0;
+        while (left <= right) {
+            if (left % 2 == 1) result += tree[left++]; // 왼쪽이 홀수이면 결과에 더하고 다음으로 이동
+            if (right % 2 == 0) result += tree[right--]; // 오른쪽이 짝수이면 결과에 더하고 이전으로 이동
+            left /= 2;
+            right /= 2;
+        }
+        return result;
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
-        long[] data = new long[n+1] ;
-        long[] tree = new long[n * 4];
+        int m = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
 
-        for (int i = 1; i <= n; i++) {
-            data[i] = Long.parseLong(br.readLine());
+        arr = new long[n];
+        tree = new long[2 * n]; // 세그먼트 트리 크기는 2 * n
+
+        // 배열 초기화
+        for (int i = 0; i < n; i++) {
+            arr[i] = Long.parseLong(br.readLine());
         }
-        init(data, tree, 1, 1, n);
 
-        for (int i = 0; i <m+k; i++) {
+        // 세그먼트 트리 초기화
+        init();
+
+        for (int i = 0; i < m + k; i++) {
             st = new StringTokenizer(br.readLine());
-            int a =Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            long c =Long.parseLong(st.nextToken());
-            if(a ==1){
-                update(data, tree, 1, 1, n, b, c);
-            }else{
-                System.out.println(query(tree, 1, 1, n, b, (int)c));
+            long c = Long.parseLong(st.nextToken());
+
+            if (a == 1) {
+                // b번째 수를 c로 바꾸는 작업
+                update(b - 1, c);
+            } else if (a == 2) {
+                // b번째 수부터 c번째 수까지의 합을 구하는 작업
+                System.out.println(sum(b - 1, (int) c - 1));
             }
         }
-
     }
-
-    static void init(long[] data, long[] tree, int node, int start, int end) {
-        if (start == end) {
-            tree[node] = data[start];
-        } else {
-            init(data, tree, node * 2, start, (start + end) / 2);
-            init(data, tree, node * 2 + 1, (start + end) / 2 + 1, end);
-            tree[node] = tree[node * 2] + tree[node * 2 + 1];
-        }
-    }
-
-    static void update(long[] data, long[] tree, int node, int start, int end, int index, long val) {
-        if (index < start || index > end) {
-            return;
-        }
-        if (start == end) {
-            data[index] = val;
-            tree[node] = val;
-            return;
-        }
-        update(data, tree, node * 2, start,(start + end) / 2, index, val);
-        update(data, tree, node * 2 + 1, (start + end) / 2 + 1, end, index, val);
-        tree[node] = tree[node*2] +tree[node*2+1];
-    }
-
-    static long query(long[] tree, int node, int start, int end, int left, int right) {
-        if (left > end || right < start) {
-            return 0;
-        }
-        if (left <= start && end <= right) {
-            return tree[node];
-        }
-        long lsum = query(tree, node * 2, start, (start + end) / 2, left, right);
-        long rsum = query(tree, node * 2 + 1, (start + end) / 2 + 1, end, left, right);
-        return lsum + rsum;
-    }
-
-
 }
