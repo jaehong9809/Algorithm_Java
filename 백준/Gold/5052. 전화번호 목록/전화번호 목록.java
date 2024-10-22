@@ -1,31 +1,40 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
-class Main {
-    public static void main(String[] args) throws IOException {
+public class Main {
+    public static void main(String[] args) throws Exception {
+        // 입력
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine());
-        while (T-- > 0) {
-            int n = Integer.parseInt(br.readLine());
-            String[] data=new String[n];
+        StringTokenizer st;
 
-            for (int i = 0; i < n; i++) {
-                data[i] = br.readLine();
+        int t = Integer.parseInt(br.readLine());
+        for (int i = 0; i < t; i++) {
+            int n = Integer.parseInt(br.readLine());  // 전화번호 수
+            String[] phoneNumbers = new String[n];
+
+            for (int j = 0; j < n; j++) {
+                phoneNumbers[j] = br.readLine(); // 전화번호
             }
-            Arrays.sort(data);
 
-            boolean sign = false;
-            for (int i = 0; i < n-1; i++) {
-                if (data[i + 1].startsWith(data[i])) {
-                    sign=true;
+            // 전화번호 정렬
+            Arrays.sort(phoneNumbers);
+
+            // 실행
+            boolean isStart = true;
+            for (int j = 0; j < n - 1; j++) {
+                // 다른 전화번호들이 가장 짧은 전화번호로 시작하는지 확인
+                if (phoneNumbers[j + 1].startsWith(phoneNumbers[j])) {
+                    isStart = false;
                     break;
                 }
             }
-            if (sign) System.out.println("NO");
-            else System.out.println("YES");
-        }
 
+            // 결과 출력
+            if (isStart) {
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
+            }
+        }
     }
 }
