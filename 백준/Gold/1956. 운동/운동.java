@@ -39,8 +39,8 @@ class Main {
         }
         int res = Integer.MAX_VALUE;
 
-        for (int i = 1; i <= v; i++) {
-            for (int j = 1; j <= v; j++) {
+        for (int i = 1; i <= v - 1; i++) {
+            for (int j = i + 1; j <= v; j++) {
                 if (i == j) continue;
                 res = Math.min(res, matrix[i][j] + matrix[j][i]);
             }
