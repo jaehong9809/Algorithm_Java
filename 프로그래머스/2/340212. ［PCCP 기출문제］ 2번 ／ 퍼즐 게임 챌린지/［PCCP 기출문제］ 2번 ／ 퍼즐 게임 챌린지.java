@@ -20,7 +20,7 @@ class Solution {
     }
     public int bsc(){
         int start =1;
-        int end = 100001;
+        int end = 100000;
         int result =0;
         while(start<=end){
             int mid = (start+end)/2;
