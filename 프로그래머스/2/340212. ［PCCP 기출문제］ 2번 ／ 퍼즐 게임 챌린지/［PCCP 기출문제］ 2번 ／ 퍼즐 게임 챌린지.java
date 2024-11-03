@@ -19,22 +19,21 @@ class Solution {
         return answer;
     }
     public int bsc(){
-        int start =0;
-        int end = 100000;
+        int start =1;
+        int end = 100001;
         int result =0;
-        while(start<end){
+        while(start<=end){
             int mid = (start+end)/2;
             boolean b = cal(mid);
             
             if(b){
-                end = mid;
-                result = mid;
+                end = mid-1;
             }else{
                 start=mid+1;
             }
             
         }
-        return (start + end)/2;
+        return start;
     }
     
     public boolean cal(long level){
