@@ -10,20 +10,19 @@ class Main {
         int start = 1;
         int end = 2;
         boolean sign = false;
-        while (end <= 100000*1000) {
-            if((end+start) * (end - start) == n){
+        while (start<end) {
+            if ((end + start) * (end - start) == n) {
                 System.out.println(end);
                 start++;
                 end++;
                 sign = true;
-            }
-            else if((end+start) * (end - start) > n){
+            } else if ((end + start) * (end - start) > n) {
                 start++;
-            }else{
+            } else {
                 end++;
             }
         }
-        if(!sign){
+        if (!sign) {
             System.out.println(-1);
         }
     }
