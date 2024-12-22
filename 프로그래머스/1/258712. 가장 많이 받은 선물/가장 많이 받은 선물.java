@@ -1,63 +1,56 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
 class Solution {
     public int solution(String[] friends, String[] gifts) {
-        int answer = 0;
-        Map<String, Integer> rank = new HashMap<>();
-        Map<String, Person> people = new HashMap<>();
-        int[] results = new int[friends.length];
-        for (String friend : friends) {
-            rank.put(friend, 0);
-            people.put(friend, new Person());
+        Map<String, Integer> map=new HashMap<>();
+        Map<String, Integer> nextMonth = new HashMap<>();
+        for(String friend: friends){
+            map.put(friend, 0);
+            nextMonth.put(friend, 0);
         }
-
-        for (String gift : gifts) {
-            String[] s = gift.split(" ");
-            String a = s[0];
-            String b = s[1];
-            people.get(a).give.put(b, people.get(a).give.getOrDefault(b,0)+1);
-            people.get(a).give_num++;
-            people.get(b).take.put(a, people.get(b).take.getOrDefault(a,0)+1);
-            people.get(b).take_num++;
+        
+        Map<String, Integer> com = new HashMap<>();
+        
+        for(String gift : gifts){
+            String[] split = gift.split(" ");
+            map.put(split[0], map.get(split[0])+1);
+            map.put(split[1], map.get(split[1])-1);
+            
+            if(com.containsKey(gift)){
+                com.put(gift, com.get(gift)+1);
+            }else{
+                com.put(gift, 1);
+            }
         }
-        for (String s : people.keySet()) {
-            Person person = people.get(s);
-            rank.put(s, person.give_num- person.take_num);
-        }
-
-
-        for (int i = 0; i < friends.length; i++) {
-            String a = friends[i];
-            for (int j = 0; j < friends.length; j++) {
+       
+        
+        for(int i=0; i<friends.length-1; i++){
+            for(int j=i+1; j<friends.length; j++){
                 if(i==j) continue;
-                String b = friends[j];
-                int atob = people.get(a).give.getOrDefault(b, 0);
-                int btoa = people.get(b).give.getOrDefault(a, 0);
-
-                if(atob>btoa) results[i]++;
-                else if(atob ==btoa || (atob==0 && btoa==0)){
-                    if(rank.get(a)>rank.get(b)){
-                        results[i]++;
+                int a=0;
+                int b=0;
+                if(com.containsKey(friends[i]+" "+friends[j])){
+                    a=com.get(friends[i]+" "+friends[j]);
+                }
+                
+                if(com.containsKey(friends[j]+" "+friends[i])){
+                    b= com.get(friends[j]+" "+friends[i]);
+                }
+                if(a>b){
+                    nextMonth.put(friends[i], nextMonth.get(friends[i])+1);
+                }else if(a<b){
+                    nextMonth.put(friends[j], nextMonth.get(friends[j])+1);
+                }else{
+                    if(map.get(friends[i])>map.get(friends[j])){
+                        nextMonth.put(friends[i], nextMonth.get(friends[i])+1);
+                    }else if(map.get(friends[i])<map.get(friends[j])){
+                        nextMonth.put(friends[j], nextMonth.get(friends[j])+1);
                     }
                 }
             }
         }
-        for (int result : results) {
-            answer = Math.max(result, answer);
-        }
+        int answer = Collections.max(nextMonth.values());
         return answer;
     }
-
-    public static class Person{
-        Map<String, Integer> give = new HashMap<>();
-        Map<String, Integer> take = new HashMap<>();
-        int give_num=0;
-        int take_num=0;
-
-        public Person() {
-        }
-    }
-
+    
+    
 }
