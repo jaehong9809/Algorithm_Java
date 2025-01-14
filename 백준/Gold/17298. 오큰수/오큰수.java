@@ -21,8 +21,12 @@ class Main {
         int[] results = new int[n+1];
 
         for(int i=n; i>=1; i--){
-            while (!st.isEmpty() && st.peek() <= data[i]) {
-                st.pop();
+            while (!st.isEmpty()) {
+                if(st.peek()<=data[i]){
+                    st.pop();
+                }else{
+                    break;
+                }
             }
             if (!st.isEmpty()) {
                 results[i] = st.peek();
