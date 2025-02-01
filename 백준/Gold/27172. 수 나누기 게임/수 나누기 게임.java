@@ -6,6 +6,7 @@ class Main {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
         int[] data = new int[n];
+        int[] result = new int[n];
         int maxVal = 0;
 
         for (int i = 0; i < n; i++) {
@@ -13,30 +14,28 @@ class Main {
             maxVal = Math.max(maxVal, data[i]);
         }
 
-        int[] count = new int[maxVal + 1];
+        boolean[] exists = new boolean[maxVal + 1];
         for (int num : data) {
-            count[num]++;
+            exists[num] = true;
         }
 
-        int[] result = new int[maxVal + 1];
+        int[] count = new int[maxVal + 1];
 
         for (int i = 1; i <= maxVal; i++) {
-            if (count[i] == 0) continue;
-
+            if (!exists[i]) continue;
             for (int j = i * 2; j <= maxVal; j += i) {
-                if (count[j] > 0) {
-                    result[i] += count[j];
-                    result[j] -= count[i];
+                if (exists[j]) {
+                    count[i]++;
+                    count[j]--;
                 }
             }
         }
 
-        int[] answer = new int[n];
         for (int i = 0; i < n; i++) {
-            answer[i] = result[data[i]];
+            result[i] = count[data[i]];
         }
 
-        for (int i : answer) {
+        for (int i : result) {
             System.out.print(i+" ");
         }
     }
