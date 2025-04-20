@@ -22,7 +22,7 @@ class Main {
 
     static long binarySearch() {
         long left = 1;
-        long right = (long) 1e18;
+        long right = Long.MAX_VALUE;
         long answer = right;
 
         while (left <= right) {
@@ -45,19 +45,24 @@ class Main {
             Node node = nodes[i];
 
             if (node.type == 1) {
-                // 몬스터 방
                 long monsterAtk = node.x;
                 long monsterHp = node.y;
 
-                long turnsToKill = (monsterHp + curAtk - 1) / curAtk;
+                long turnsToKill = monsterHp / curAtk;
+                if (monsterHp % curAtk != 0) turnsToKill++;
+
                 long damage = monsterAtk * (turnsToKill - 1);
                 hp -= damage;
 
                 if (hp <= 0) return false;
             } else {
-                // 포션 방
                 curAtk += node.x;
-                hp = Math.min(maxHp, hp + node.y);
+
+                if (hp + node.y >= maxHp) {
+                    hp = maxHp;
+                } else {
+                    hp += node.y;
+                }
             }
         }
         return true;
