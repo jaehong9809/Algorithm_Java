@@ -30,7 +30,7 @@ class Solution {
         });
 
         PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> {
-            if(a.sum == b.sum) {
+            if (a.sum == b.sum) {
                 return a.index - b.index;
             }
             return Integer.compare(b.sum, a.sum);
@@ -72,6 +72,7 @@ class Solution {
         int x, y;
         int sum;
         int index;
+
         public Node(int x, int y, int sum, int index) {
             this.x = x;
             this.y = y;
