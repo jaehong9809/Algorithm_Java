@@ -16,13 +16,6 @@ class Solution {
                 answer=Math.max(answer, dp[i][j]);
             }
         }
-        //  for(int i=1; i<triangle.length; i++){
-        //     for(int j=0; j<triangle[triangle.length-1].length; j++){
-        //         System.out.print(dp[i][j]+" ");
-        //     }
-        //     System.out.println("---------------");
-        // }       
-        
         return answer;
     }
 }
