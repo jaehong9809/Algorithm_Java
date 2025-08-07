@@ -1,83 +1,63 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-class Main {
-    static int n, m;
+public class Main {
+
+    static int N, M;
     static char[][] map;
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
     static boolean[][] visited;
-    static boolean answer = false;
-    static boolean[][] realVisited;
+    static int[] dx = {0,0,1,-1};
+    static int[] dy = {1,-1,0,0};
+    static boolean flag = false;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
 
-        map = new char[n + 2][m + 2];
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        visited = new boolean[n + 2][m + 2];
-        realVisited = new boolean[n + 2][m + 2];
-        for (int i = 1; i <= n; i++) {
-            String str = br.readLine();
-            for (int j = 1; j <= m; j++) {
-                map[i][j] = str.charAt(j - 1);
+        map = new char[N][M];
+
+        for (int i = 0; i < N; i++) {
+            String s = br.readLine();
+            for (int j = 0; j < M; j++) {
+                map[i][j] = s.charAt(j);
             }
         }
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                dfs(i, j, i, j, 1);
-                if(answer){
-                    System.out.println(answer ? "Yes" : "No");
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                flag = false;
+                visited = new boolean[N][M];
+                visited[i][j] = true;
+                dfs(1, i, j, i, j);
+                if (flag) {
+                    System.out.print("Yes");
                     return;
                 }
             }
         }
-        System.out.println(answer ? "Yes" : "No");
+
+        System.out.print("No");
     }
 
-    static void bfs(int startx, int starty) {
-        Queue<int[]> queue = new ArrayDeque<>();
-        realVisited[startx][starty] = true;
-        queue.offer(new int[]{startx, starty});
-        while (!queue.isEmpty()) {
-            int[] now = queue.poll();
-            for (int i = 0; i < 4; i++) {
-                int nx = now[0] + dx[i];
-                int ny = now[1] + dy[i];
-                if (nx < 1 || nx > n || ny < 1 || ny > m) continue;
-                if (map[nx][ny] != map[startx][starty]) continue;
-                if (realVisited[nx][ny]) continue;
-
-                realVisited[nx][ny] = true;
-                queue.offer(new int[]{nx, ny});
-            }
-        }
-    }
-
-    static void dfs(int startx, int starty, int nowx, int nowy, int cnt) {
-        visited[nowx][nowy] = true;
-
+    static void dfs(int depth, int x, int y, int a, int b) {
         for (int i = 0; i < 4; i++) {
-            int nx = nowx + dx[i];
-            int ny = nowy + dy[i];
-            if (nx < 1 || nx > n || ny < 1 || ny > m) continue;
+            int nx = x + dx[i];
+            int ny = y + dy[i];
 
-            if (map[nx][ny] != map[startx][starty]) continue;
-            if (nx == startx && ny == starty && cnt > 2) {
-                answer = true;
+            if (nx == a && ny == b && depth >= 4) {
+                flag = true;
             }
+
+            if (nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
             if (visited[nx][ny]) continue;
+            if (map[x][y] != map[nx][ny]) continue;
 
-            dfs(startx, starty, nx, ny, cnt + 1);
+            visited[nx][ny] = true;
+            dfs(depth + 1, nx, ny, a, b);
+            visited[nx][ny] = false;
         }
-        visited[nowx][nowy] = false;
     }
-
-
 }
