@@ -2,62 +2,53 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    static int n, m;
+    static String[] arr;
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {-1, 0, 1, 0};
+    static boolean[][] visit;
+    static char c;
 
-    static int N, M;
-    static char[][] map;
-    static boolean[][] visited;
-    static int[] dx = {0,0,1,-1};
-    static int[] dy = {1,-1,0,0};
-    static boolean flag = false;
+    static boolean check(int x, int y) {
+        return 0 <= x && x < m && 0 <= y && y < n;
+    }
 
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-
-        map = new char[N][M];
-
-        for (int i = 0; i < N; i++) {
-            String s = br.readLine();
-            for (int j = 0; j < M; j++) {
-                map[i][j] = s.charAt(j);
-            }
-        }
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                flag = false;
-                visited = new boolean[N][M];
-                visited[i][j] = true;
-                dfs(1, i, j, i, j);
-                if (flag) {
-                    System.out.print("Yes");
-                    return;
+    static void dfs(int x, int y, int prvX, int prvY) {
+        for (int d = 0; d < 4; d++) {
+            int nx = x + dx[d];
+            int ny = y + dy[d];
+            if (check(nx, ny) && arr[ny].charAt(nx) == c && !(prvX == nx && prvY == ny)) {
+                if (visit[ny][nx]) {
+                    System.out.println("Yes");
+                    System.exit(0); // 조기 종료
+                } else {
+                    visit[ny][nx] = true;
+                    dfs(nx, ny, x, y);
                 }
             }
         }
-
-        System.out.print("No");
     }
 
-    static void dfs(int depth, int x, int y, int a, int b) {
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
-            if (nx == a && ny == b && depth >= 4) {
-                flag = true;
+        arr = new String[n];
+        for (int i = 0; i < n; i++) arr[i] = br.readLine();
+
+        visit = new boolean[n][m];
+
+        for (int x = 0; x < m; x++) {
+            for (int y = 0; y < n; y++) {
+                if (!visit[y][x]) {
+                    c = arr[y].charAt(x);
+                    visit[y][x] = true;
+                    dfs(x, y, -1, -1);
+                }
             }
-
-            if (nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
-            if (visited[nx][ny]) continue;
-            if (map[x][y] != map[nx][ny]) continue;
-
-            visited[nx][ny] = true;
-            dfs(depth + 1, nx, ny, a, b);
-            visited[nx][ny] = false;
         }
+        System.out.println("No");
     }
 }
