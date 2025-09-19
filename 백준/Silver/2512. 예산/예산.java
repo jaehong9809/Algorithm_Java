@@ -1,46 +1,43 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 class Main{
-    static int n, m;
-    static int[] arr;
-    static int max=-1;
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
-            if (max < arr[i]) {
-                max=arr[i];
-            }
-        }
-        m=sc.nextInt();
+        int n = sc.nextInt();
+        int[] data=new int[n];
 
-        System.out.println(binarySearch());
+        for (int i = 0; i < n; i++) data[i] = sc.nextInt();
+
+        Arrays.sort(data);
+
+        int m = sc.nextInt();
+
+        int res = bs(m, n, data);
+        System.out.println(res);
     }
-
-    public static int binarySearch(){
-        int left = 0;
-        int right = max;
-        while (left <= right) {
-            int mid = (left+right)/2;
-            int total =0;
+    static int bs(int m, int n, int[] data){
+        int left = 1;
+        int right = data[n-1];
+        int res=0;
+        while (left<=right){
+            int mid = (left+ right)/2;
+            int total = 0;
+            int index = 0;
             for (int i = 0; i < n; i++) {
-                if (mid < arr[i]) {
+                if (mid > data[i]){
+                    total += data[i];
+                }else {
                     total+=mid;
-                }else{
-                    total+=arr[i];
                 }
             }
-
-            if(total>m){
-                right = mid-1;
+            if(total<=m){
+                res = mid;
+                left=mid+1;
             }else{
-                left = mid+1;
-
+                right = mid-1;
             }
         }
-        return right;
+        return res;
     }
 }
