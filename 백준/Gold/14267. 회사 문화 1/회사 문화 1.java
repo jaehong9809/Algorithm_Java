@@ -11,6 +11,7 @@ class Main {
     static ArrayList<Integer>[] graph;
     static int[] point;
     static boolean[] vi;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -36,30 +37,17 @@ class Main {
             int b = Integer.parseInt(st.nextToken());
             point[a] += b;
         }
-        dfs(1);
+        bfs(1);
 
-        for (int i = 1; i <=n ; i++) {
-            System.out.print(point[i]+" ");
-        }
-    }
-    static void dfs(int start){
-        if(vi[start]){
-            return;
-        }
-        for (int i = 0; i < graph[start].size(); i++) {
-            int next = graph[start].get(i);
-            if(vi[next]) continue;
-            point[next] +=point[start];
-            dfs(next);
+        for (int i = 1; i <= n; i++) {
+            System.out.print(point[i] + " ");
         }
     }
 
     static void bfs(int start) {
         Queue<Integer> queue = new ArrayDeque<>();
-
-
         queue.offer(start);
-
+        
         while (!queue.isEmpty()) {
             Integer now = queue.poll();
 
@@ -67,7 +55,7 @@ class Main {
                 Integer next = graph[now].get(i);
                 if (vi[next]) continue;
                 queue.offer(next);
-                point[next] +=point[now];
+                point[next] += point[now];
             }
         }
     }
