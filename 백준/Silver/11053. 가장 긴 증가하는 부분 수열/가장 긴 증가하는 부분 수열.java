@@ -1,40 +1,46 @@
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Scanner;
 
-class Main {
+class Main{
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+
         int n = sc.nextInt();
-        int[] nums = new int[n];
+        int[] list = new int[n];
 
         for (int i = 0; i < n; i++) {
-            nums[i] = sc.nextInt();
+            list[i] = sc.nextInt();
         }
 
-        int[] dp = new int[n];
-        dp[0] = 1;
-        for (int i = 1; i < n; i++) {
-            int max = -1;
-            int index = -1;
-            dp[i]=1;
-            for (int j = i - 1; j >= 0; j--) {
-                if (nums[i] > nums[j]) {
-                    if (max < dp[j]) {
-                        max = dp[j];
-                        index=j;
-                    }
-                }
-            }
-            if (index != -1) {
-                dp[i] += dp[index];
-            }
-        }
+        List<Integer> lis = new ArrayList<>();
 
-        int max = -1;
         for (int i = 0; i < n; i++) {
-            if (max < dp[i]) {
-                max = dp[i];
+            int now = list[i];
+            int pos = binarySearch(lis, now);
+            if (pos == lis.size()) {
+                lis.add(now);
+            }else{
+                lis.set(pos, now);
             }
         }
-        System.out.println(max);
+
+        System.out.println(lis.size());
+    }
+
+    static int binarySearch(List<Integer> list, int target) {
+        int start = 0;
+        int end = list.size();
+        while (start < end) {
+            int mid = (start+end)/2;
+
+            if (list.get(mid) < target) {
+                start= mid+1;
+            }else{
+                end = mid;
+            }
+        }
+        return start;
     }
 }
