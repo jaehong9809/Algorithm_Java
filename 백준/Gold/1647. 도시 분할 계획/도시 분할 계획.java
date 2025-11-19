@@ -1,65 +1,89 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.Collections;
+import java.util.StringTokenizer;
 
 class Main {
-    static int max=-1;
-    static class Edges implements Comparable<Edges>{
-        int w;
-        int cost;
-
-        public Edges(int w, int cost) {
-            this.w = w;
-            this.cost = cost;
-        }
-
-        @Override
-        public int compareTo(Edges o) {
-            return this.cost - o.cost;
-        }
-    }
-    static int INF = (int )1e9;
-    static ArrayList<Edges>[] edges;
     static int n, m;
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        m = sc.nextInt();
-        edges=new ArrayList[n+1];
+    static ArrayList<Node> graph = new ArrayList<>();
+    static int[] parent;
 
-        for (int i = 1; i <= n; i++) {
-            edges[i] = new ArrayList<>();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        parent = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            parent[i] = -1;
         }
+
+
         for (int i = 0; i < m; i++) {
-            int a =sc.nextInt();
-            int b =sc.nextInt();
-            int c = sc.nextInt();
-
-            edges[a].add(new Edges(b, c));
-            edges[b].add(new Edges(a, c));
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            graph.add(new Node(a, b, c));
         }
-        System.out.println(prim()-max);
-    }
-    public static int prim(){
-        boolean[] visited = new boolean[n + 1];
-        PriorityQueue<Edges> pq = new PriorityQueue<>();
-        pq.offer(new Edges(1, 0));
-        int total = 0;
-        while (!pq.isEmpty()) {
-            Edges edge = pq.poll();
-            int v = edge.w;
-            int cost = edge.cost;
-            if(visited[v]) continue;
-            visited[v] = true;
-            total+=cost;
-            if(cost>max)max = cost;
-            for (Edges e : edges[v]) {
-                if(!visited[e.w]) pq.offer(e);
+
+        Collections.sort(graph);
+        int cnt=0;
+        int sum=0;
+        int max = 0;
+        for (Node node : graph) {
+
+            int x = node.x;
+            int y = node.y;
+            int w = node.w;
+            if (find(x) != find(y)) {
+                cnt++;
+                union(x, y);
+                sum+=w;
+                max = Math.max(max, w);
+            }
+            if (cnt == n - 1) {
+                break;
             }
         }
 
-        return total;
+        System.out.println(sum-max);
     }
 
+    static int find(int x) {
+        if (parent[x] < 0) {
+            return x;
+        }
 
+        return parent[x] = find(parent[x]);
+    }
+
+    static void union(int x, int y) {
+        int rootx = find(x);
+        int rooty = find(y);
+
+        if(rootx == rooty) return;
+
+        parent[rootx] += parent[rooty];
+        parent[rooty] = rootx;
+    }
+
+    static class Node implements Comparable<Node> {
+        int x, y;
+        int w;
+
+        public Node(int x, int y, int w) {
+            this.x = x;
+            this.y = y;
+            this.w = w;
+        }
+
+        @Override
+        public int compareTo(Node o) {
+            return this.w - o.w;
+        }
+    }
 }
