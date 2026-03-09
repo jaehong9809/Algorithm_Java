@@ -27,7 +27,6 @@ class Main {
 			}
 		}
 		set.add(map[0][0]);
-		visited[0][0] = true;
 		dfs(0, 0, 1);
 		System.out.println(max);
 	}
@@ -41,15 +40,12 @@ class Main {
 			int ny = dy[i] + y;
 			if (nx < 0 || nx >= n || ny < 0 || ny >= m)
 				continue;
-			if(visited[nx][ny]) continue;
 			if(set.contains(map[nx][ny]))continue;
 			
 			
 			set.add(map[nx][ny]);
-			visited[nx][ny] = true;
 			dfs(nx, ny, cnt+1);
 			set.remove(map[nx][ny]);
-			visited[nx][ny] = false;
 			
 		}
 	}
