@@ -1,10 +1,10 @@
+
 import java.util.*;
 import java.io.*;
 
 class Main {
 	static int n, m;
 	static char[][] map;
-	static boolean[][] visited;
 	static int max = 0;
 
 	static int[] dx = { -1, 1, 0, 0 };
@@ -18,7 +18,6 @@ class Main {
 		m = Integer.parseInt(st.nextToken());
 
 		map = new char[n][m];
-		visited = new boolean[n][m];
 
 		for (int i = 0; i < n; i++) {
 			String str = br.readLine();
@@ -33,20 +32,20 @@ class Main {
 
 	public static void dfs(int x, int y, int cnt) {
 		max = Math.max(max, cnt);
-		//System.out.println(x+", "+y+": "+map[x][y]);
-		
+		// System.out.println(x+", "+y+": "+map[x][y]);
+
 		for (int i = 0; i < 4; i++) {
 			int nx = dx[i] + x;
 			int ny = dy[i] + y;
 			if (nx < 0 || nx >= n || ny < 0 || ny >= m)
 				continue;
-			if(set.contains(map[nx][ny]))continue;
-			
-			
+			if (set.contains(map[nx][ny]))
+				continue;
+
 			set.add(map[nx][ny]);
-			dfs(nx, ny, cnt+1);
+			dfs(nx, ny, cnt + 1);
 			set.remove(map[nx][ny]);
-			
+
 		}
 	}
 
