@@ -1,92 +1,57 @@
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
+import java.io.*;
 
 class Main {
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {-1, 1, 0, 0};
-    static char[][] matrix;
-    static int n;
-    static int m;
-    static boolean[][] visited;
-    static Set<Character> set = new HashSet<>();
-    static int[][] cntMatrix;
-    static int max=0;
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+	static int n, m;
+	static char[][] map;
+	static boolean[][] visited;
+	static int max = 0;
 
-        n = sc.nextInt();
-        m = sc.nextInt();
-        if(n==1&&m==1){
-            System.out.println(1);
-            return;
-        }
-        sc.nextLine();
-        matrix = new char[n][m];
-        visited = new boolean[n][m];
-        cntMatrix = new int[n][m];
+	static int[] dx = { -1, 1, 0, 0 };
+	static int[] dy = { 0, 0, -1, 1 };
+	static Set<Character> set = new HashSet<>();
 
-        for (int i = 0; i < n; i++) {
-            String str = sc.nextLine();
-            for (int j = 0; j < m; j++) {
-                matrix[i][j] = str.charAt(j);
-            }
-        }
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
 
-        /*set.add(matrix[0][0]);
-        visited[0][0]=true;*/
-        //cntMatrix[0][0]=1;
-        dfs(0, 0, 0);
-        //dfs(0, 0);
-        /*for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                System.out.print(cntMatrix[i][j]+" ");
-            }
-            System.out.println();
-        }*/
-        System.out.println(max);
-    }
+		map = new char[n][m];
+		visited = new boolean[n][m];
 
-    public static void dfs(int startx, int starty, int count) {
-        if (set.contains(matrix[startx][starty])) {
-            max = Math.max(count, max);
-            return;
-        }else{
-            set.add(matrix[startx][starty]);
+		for (int i = 0; i < n; i++) {
+			String str = br.readLine();
+			for (int j = 0; j < m; j++) {
+				map[i][j] = str.charAt(j);
+			}
+		}
+		set.add(map[0][0]);
+		visited[0][0] = true;
+		dfs(0, 0, 1);
+		System.out.println(max);
+	}
 
-            for (int i = 0; i < 4; i++) {
-                int nextx = dx[i] + startx;
-                int nexty = dy[i] + starty;
-                if (!(nextx >= 0 && nextx < n && nexty >= 0 && nexty < m)) continue;
-                dfs(nextx, nexty, count+1);
-            }
+	public static void dfs(int x, int y, int cnt) {
+		max = Math.max(max, cnt);
+		//System.out.println(x+", "+y+": "+map[x][y]);
+		
+		for (int i = 0; i < 4; i++) {
+			int nx = dx[i] + x;
+			int ny = dy[i] + y;
+			if (nx < 0 || nx >= n || ny < 0 || ny >= m)
+				continue;
+			if(visited[nx][ny]) continue;
+			if(set.contains(map[nx][ny]))continue;
+			
+			
+			set.add(map[nx][ny]);
+			visited[nx][ny] = true;
+			dfs(nx, ny, cnt+1);
+			set.remove(map[nx][ny]);
+			visited[nx][ny] = false;
+			
+		}
+	}
 
-            set.remove(matrix[startx][starty]);
-        }
-
-    }
-
-    public static void dfs(int startx, int starty) {
-       // System.out.println(matrix[startx][starty]);
-        if (max < cntMatrix[startx][starty]) {
-            max=cntMatrix[startx][starty];
-        }
-        for (int i = 0; i < 4; i++) {
-            int nextx = dx[i] + startx;
-            int nexty = dy[i] + starty;
-
-            if (!(nextx >= 0 && nextx < n && nexty >= 0 && nexty < m)) continue;
-
-            if (visited[nextx][nexty]) continue;
-
-            if (!set.contains(matrix[nextx][nexty])) {
-                visited[nextx][nexty]=true;
-                cntMatrix[nextx][nexty] = cntMatrix[startx][starty] + 1;
-                set.add(matrix[nextx][nexty]);
-                dfs(nextx, nexty);
-                set.remove(matrix[nextx][nexty]);
-                visited[nextx][nexty]=false;
-            }
-        }
-    }
 }
