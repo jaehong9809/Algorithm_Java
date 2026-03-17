@@ -1,119 +1,106 @@
 import java.util.*;
+import java.io.*;
 
-class Main {
-    static int n, m;
-    static int x, y;
-    static int k;
-    static int[][] map;
-    static int[] orders;
-    static int top = 0;
-    static int bottom = 0;
-    static int left = 0;
-    static int right = 0;
-    static int front = 0;
-    static int back = 0;
-    static int[] dx = {-1000, 0, 0, -1, 1};
-    static int[] dy = {-1000, 1, -1, 0, 0};
+public class Main {
+	static int n, m;
+	static int x, y;
+	static int k;
+	static int[][] map;
+	static int left = 0;
+	static int right = 0;
+	static int front = 0;
+	static int back = 0;
+	static int down = 0;
+	static int up = 0;
+	static int[] dx = { 0, 0, 0, -1, 1 };
+	static int[] dy = { 0, 1, -1, 0, 0 };
 
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
+		x = Integer.parseInt(st.nextToken());
+		y = Integer.parseInt(st.nextToken());
+		k = Integer.parseInt(st.nextToken());
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        m = sc.nextInt();
-        x = sc.nextInt();
-        y = sc.nextInt();
-        k = sc.nextInt();
+		map = new int[n][m];
 
-        map = new int[n][m];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                map[i][j] = sc.nextInt();
-            }
-        }
-        orders = new int[k];
-        for (int i = 0; i < k; i++) {
-            orders[i] = sc.nextInt();
-        }
-        // 1:->, 2:<-, 3:^ 4: v
-        if (n == 1 && m == 1) {
-            System.out.println(0);
-            return;
-        }
-        for (int order : orders) {
-            int tmpx = x + dx[order];
-            int tmpy = y + dy[order];
-            if (tmpx < 0 || tmpx >= n || tmpy < 0 || tmpy >= m) continue;
-            if (order == 1) {
-                //top left bottom right
-                if (map[tmpx][tmpy] == 0) {
-                    map[tmpx][tmpy] = right;
-                } else {
-                    right = map[tmpx][tmpy];
-                    map[tmpx][tmpy]=0;
-                }
-                x = tmpx;
-                y = tmpy;
-                int tmp = top;
-                top = left;
-                left = bottom;
-                bottom = right;
-                right = tmp;
-            }
-            if (order == 2) {
-                // top right bottom left
-                if (map[tmpx][tmpy] == 0) {
-                    map[tmpx][tmpy] = left;
-                } else {
-                    left = map[tmpx][tmpy];
-                    map[tmpx][tmpy]=0;
-                }
-                x = tmpx;
-                y = tmpy;
-                int tmp = top;
-                top = right;
-                right = bottom;
-                bottom = left;
-                left = tmp;
+		for (int i = 0; i < n; i++) {
+			String[] str = br.readLine().split(" ");
+			for (int j = 0; j < m; j++) {
+				map[i][j] = Integer.parseInt(str[j]);
+			}
+		}
 
-            }
-            if (order == 3) {
-                // top back bottom front
-                if (map[tmpx][tmpy] == 0) {
-                    map[tmpx][tmpy] = back;
-                } else {
-                    back = map[tmpx][tmpy];
-                    map[tmpx][tmpy]=0;
-                }
-                x = tmpx;
-                y = tmpy;
-                int tmp = top;
-                top = front;
-                front = bottom;
-                bottom = back;
-                back = tmp;
+		String[] input = br.readLine().split(" ");
 
-            }
-            if (order == 4) {
-                // top front bottom back
-                if (map[tmpx][tmpy] == 0) {
-                    map[tmpx][tmpy] = front;
-                } else {
-                    front = map[tmpx][tmpy];
-                    map[tmpx][tmpy]=0;
-                }
-                x = tmpx;
-                y = tmpy;
-                int tmp = top;
-                top = back;
-                back = bottom;
-                bottom = front;
-                front = tmp;
+		for (String tmp : input) {
+			int dir = Integer.parseInt(tmp);
+			if (move(dir)) {
+				System.out.println(up);
+			}
+		}
+	}
 
+	static boolean move(int dir) {
+		int nx = x + dx[dir];
+		int ny = y + dy[dir];
+		if (nx < 0 || nx >= n || ny < 0 || ny >= m)
+			return false;
+		int tmp = map[nx][ny];
+		if (dir == 1) {
+			int t = right;
+			right = up;
+			up = left;
+			left = down;
+			down = t;
+			if (tmp == 0) {
+				map[nx][ny] = down;
+			} else {
+				down = map[nx][ny];
+				map[nx][ny] = 0;
+			}
+		} else if (dir == 2) {
+			int t = left;
+			left = up;
+			up = right;
+			right = down;
+			down = t;
+			if (tmp == 0) {
+				map[nx][ny] = down;
+			} else {
+				down = map[nx][ny];
+				map[nx][ny] = 0;
+			}
+		} else if (dir == 3) {
+			int t = back;
+			back = up;
+			up = front;
+			front = down;
+			down = t;
+			if (tmp == 0) {
+				map[nx][ny] = down;
+			} else {
+				down = map[nx][ny];
+				map[nx][ny] = 0;
+			}
+		} else {
+			int t = front;
+			front = up;
+			up = back;
+			back = down;
+			down = t;
+			if (tmp == 0) {
+				map[nx][ny] = down;
+			} else {
+				down = map[nx][ny];
+				map[nx][ny] = 0;
+			}
+		}
+		x = nx;
+		y = ny;
 
-            }
-            System.out.println(top);
-        }
-
-
-    }
+		return true;
+	}
 }
